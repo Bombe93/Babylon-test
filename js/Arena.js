@@ -11,8 +11,16 @@ Arena = function(game) {
 
     // The ground
     var ground = BABYLON.Mesh.CreateGround("ground",  this.size,  this.size, 2, this.game.scene);
-//    var ground = BABYLON.Mesh.CreateBox("ground",  this.size, scene);
-//    ground.position.y = -50;
+    
+     var groundColor = new BABYLON.StandardMaterial("texture2", this.game.scene);
+     //groundColor.wireframe = true;
+     groundColor.diffuseColor = new BABYLON.Color3(0,51,153);
+     ground.material = groundColor;
+    
+    
+  // var ground = BABYLON.Mesh.CreateBox("ground",  this.size, this.game.scene);
+    //ground.position.y = -50;
+    
     this._deactivateSpecular(ground);
     ground.checkCollisions = true;
 
@@ -21,7 +29,7 @@ Arena = function(game) {
         var posX = _this._randomNumber(-_this.size/2, _this.size/2);
         var posZ = _this._randomNumber(-_this.size/2, _this.size/2);
         var t = new Target(_this.game, posX, posZ);
-    }, 1000);
+    }, 8000);
 
     // Minimap
     var mm = new BABYLON.FreeCamera("minimap", new BABYLON.Vector3(0,100,0), this.game.scene);
@@ -29,10 +37,10 @@ Arena = function(game) {
     mm.setTarget(new BABYLON.Vector3(0.1,0.1,0.1));
     mm.mode = BABYLON.Camera.ORTHOGRAPHIC_CAMERA;
 
-    mm.orthoLeft = -this.size/4;
-    mm.orthoRight = this.size/4;
-    mm.orthoTop =  this.size/4;
-    mm.orthoBottom = -this.size/4;
+    mm.orthoLeft = -this.size;
+    mm.orthoRight = this.size;
+    mm.orthoTop =  this.size;
+    mm.orthoBottom = -this.size;
 
     mm.rotation.x = Math.PI/2;
 
@@ -48,6 +56,8 @@ Arena = function(game) {
         height
     );
     this.game.scene.activeCameras.push(mm);
+    
+  
 };
 
 

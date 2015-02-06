@@ -114,9 +114,22 @@ Weapon.prototype = {
             if (pickInfo.hit && pickInfo.pickedMesh.name === "target") {
                 pickInfo.pickedMesh.explode();  
             } else {
-                var b = BABYLON.Mesh.CreateBox("box", 1, this.game.scene);
+                /*var b = BABYLON.Mesh.CreateBox("box", 1, this.game.scene);
+                b.diffuseColor = new BABYLON.Color3(0.88,0.72,0.6);
                 b.position = pickInfo.pickedPoint.clone();
-                b.checkCollisions = true;             
+                b.checkCollisions = true; 
+                */
+                
+               var b = BABYLON.Mesh.CreateBox("box", 1, this.game.scene);
+               b.position = pickInfo.pickedPoint.clone();
+               
+               var materialSphere1 = new BABYLON.StandardMaterial("texture1", this.game.scene);
+               materialSphere1.wireframe = false;
+               
+               materialSphere1.diffuseTexture = new BABYLON.Texture("assets/particles/texture1.jpg", this.game.scene);
+               b.material = materialSphere1;
+               b.checkCollisions = true;
+                        
             }
             this.animate();
             this.canFire = false;

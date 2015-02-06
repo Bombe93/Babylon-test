@@ -48,7 +48,7 @@ Game = function(canvasId) {
             engine.resize();
         }
     },false);
-      
+    
 };
 
 
@@ -70,13 +70,15 @@ Game.prototype = {
 
 
         // Update the scene background color
-        scene.clearColor=new BABYLON.Color3(0.8,0.8,0.8);
+        //scene.clearColor=new BABYLON.Color3(0.8,0.8,0.8);
+
+        scene.clearColor=new BABYLON.Color3.Black();
 
         // Hemispheric light to light the scene
         new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(1, 2, 1), scene);
 
         // Skydome
-        var skybox = BABYLON.Mesh.CreateSphere("skyBox", 50, 1000, scene);
+        var skybox = BABYLON.Mesh.CreateSphere("skyBox", 50, 1000, scene); 
         skybox.layerMask = 2;
 
         // The sky creation
@@ -89,7 +91,7 @@ Game.prototype = {
         shader.backFaceCulling = false;
         skybox.material = shader;
 
-
+          
         return scene;
     },
 

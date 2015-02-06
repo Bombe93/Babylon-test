@@ -28,7 +28,7 @@ Player = function(game, spawnPoint) {
     // The player camera
     this.camera = this._initCamera();
     // The player must click on the canvas to activate control
-    this.controlEnabled = false;
+    this.controlEnabled = true;
     // The player weapon
     this.weapon = new Weapon(game, this,this.scene.getEngine());
     var _this = this;
@@ -49,11 +49,12 @@ Player = function(game, spawnPoint) {
     this._initPointerLock();
 
     // The representation of player in the minimap
-    var s = BABYLON.Mesh.CreateSphere("player2", 16, 8, this.scene);
+    var s = BABYLON.Mesh.CreateSphere("player2", 20, 8, this.scene);
     s.position.y = 10;
     s.registerBeforeRender(function() {
         s.position.x = _this.camera.position.x;
-        s.position.z = _this.camera.position.z;        
+        s.position.z = _this.camera.position.z;   
+        meter.tick();     
     });
 
     var red = new BABYLON.StandardMaterial("red", this.scene);
@@ -65,8 +66,6 @@ Player = function(game, spawnPoint) {
     // Set the active camera for the minimap
     this.scene.activeCameras.push(this.camera);
     this.scene.activeCamera = this.camera;
-
-
 };
 
 Player.prototype = {
@@ -80,6 +79,7 @@ Player.prototype = {
             if (canvas.requestPointerLock) {
                 canvas.requestPointerLock();
             }
+            //meter.tick();
         }, false);
 
         // Event listener when the pointerlock is updated.
@@ -90,6 +90,7 @@ Player.prototype = {
             } else {
                 _this.camera.attachControl(canvas);
             }
+            //meter.tick();
         };
         document.addEventListener("pointerlockchange", pointerlockchange, false);
         document.addEventListener("mspointerlockchange", pointerlockchange, false);
@@ -109,63 +110,67 @@ Player.prototype = {
         cam.checkCollisions = true;
         cam.applyGravity = true;
         
-        	        
-         
-            window.addEventListener("keyup", onKeyUp, false);  
+        var gravity_onoff = 0;	        
+        var sceneJump = this.scene;
+        
+            window.addEventListener("keydown", onKeyUp, false);  
              
              function onKeyUp(event) {
               switch (event.keyCode) {
-      	        case 17:
-                    console.log("entrato");
+      	        case 32:
                 
-      	          var camera = new BABYLON.FreeCamera("camera", 0, this.scene);
-              		camera.animations = [];		
-                  console.log("entrato2");
+                //ctrl 17
+                
+                //cam.applyGravity = false;
+                
+                        /*
+                if(gravity_onoff!=1){
+                  cam.applyGravity = false;
+                  cam.animations = [];	
+                  gravity_onoff = 1;
+                }else{
+                    cam.applyGravity = true;
+                    gravity_onoff = 0;        
+                }
+                    */        
+             
+                
+      	          var camera = cam;
+                
                   
+                  
+              		camera.animations = [];	
+                
+                    
               		var a = new BABYLON.Animation("a", "position.y", 20, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-              		
+                   
+                     
+                     
+                    
+              		  
               		// Animation keys
               		var keys = [];
               		keys.push({ frame: 0, value: camera.position.y });
-              		keys.push({ frame: 10, value: camera.position.y + 2 });
-              		keys.push({ frame: 20, value: camera.position.y });
+                  keys.push({ frame: 6, value: camera.position.y + 12 });
+              		keys.push({ frame: 13, value: camera.position.y });
               		a.setKeys(keys);
               		
+                  
+                   
               		var easingFunction = new BABYLON.CircleEase();
               		easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
               		a.setEasingFunction(easingFunction);
-              		
-              		camera.animations.push(a);		
-              		this.scene.beginAnimation(camera, 0, 20, false);
-                                             
-                var cam = this.scene.cameras[0];
-  
-              		cam.animations = [];
-              		
-              		var a = new BABYLON.Animation(
-              		    "a",
-              		    "position.y", 20,
-              		    BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-              		    BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-              		
-              		// Animation keys
-              		var keys = [];
-              		keys.push({ frame: 0, value: cam.position.y });
-              		keys.push({ frame: 10, value: cam.position.y + 2 });
-              		keys.push({ frame: 20, value: cam.position.y });
-              		a.setKeys(keys);
-              		
-              		var easingFunction = new BABYLON.CircleEase();
-              		easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
-              		a.setEasingFunction(easingFunction);
-              		
-              		cam.animations.push(a);
-              		
-              		scene.beginAnimation(cam, 0, 20, false);                              
-                                              
-                            
-                   console.log("uscito");
-               
+              
+                 
+              		camera.animations.push(a);	
+                 
+                   
+              		sceneJump.beginAnimation(camera, 0, 20, false);
+                  
+             
+                        
+                        
+                        
     	        break;
     	    }  
                 
@@ -180,6 +185,7 @@ Player.prototype = {
         cam.angularInertia = this.angularInertia;
         cam.angularSensibility = this.angularSensibility;
         cam.layerMask = 2;
+        
         return cam;
     },
 
@@ -200,6 +206,18 @@ Player.prototype = {
      * @param pickInfo The pick data retrieved when the click has been done
      */
     handleUserMouse : function(evt, pickInfo) {
-        this.weapon.fire(pickInfo);
-    } 
+        //this.weapon.fire(pickInfo);        
+        	evt.preventDefault();
+              var rightclick;
+            	if (!evt) var evt = window.event;
+            	if (evt.which) rightclick = (evt.which == 3);
+            	else if (evt.button) rightclick = (evt.button == 2);	
+            	if(rightclick === true) {				
+            		  //console.log("right");
+                  
+            	} else if(rightclick === false) {
+            	    //console.log("left");
+                  this.weapon.fire(pickInfo);
+            	} 
+    }     
 };

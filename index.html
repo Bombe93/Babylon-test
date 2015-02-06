@@ -12,11 +12,28 @@
     <script src="js/Player.js"></script>
     <script src="js/Weapon.js"></script>
     
+    <script src="js/fpsmeter.min.js"></script>
+    
 </head>
 <body>
     <img id="viseur" src="assets/viseur.png" />
     <!--<canvas id="guiCanvas"></canvas>-->
-   <!-- <div id="fps" style="border: 3px solid #fd3300;width:100px;height:100px;position:absolute;"></div>      -->
+    <div id="fps"></div>  
+    <script>
+    
+              // Meter will be attached to `document.body` with all default options.
+        var meter = new FPSMeter();
+        
+        // Meter will use `light` theme.
+        //var meter = new FPSMeter({ theme: 'light' });
+        /*
+        // Meter will be attached to #target element, and will display graph.
+        var meter = new FPSMeter(document.getElementById('fps'), { graph: 1 });
+          */
+       // meter.showFps();
+       
+    
+    </script>
     <canvas id="renderCanvas"></canvas>
     
 	
